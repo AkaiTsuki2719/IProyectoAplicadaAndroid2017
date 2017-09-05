@@ -21,10 +21,11 @@ public class MenuActivity extends Activity implements View.OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
-		iniciar();
+		start();
 	}
 
-	public void iniciar(){
+	//inicialize components
+	public void start(){
 		
 		
 		user= getIntent().getStringExtra("user");
@@ -45,6 +46,7 @@ public class MenuActivity extends Activity implements View.OnClickListener{
 	public void onClick(View view){
 		if(view.getId()==imgBtnBuy.getId()){
 			
+			//start activity buy
 			Intent intent = new Intent(MenuActivity.this, BuyActivity.class);
             startActivity(intent);
 			

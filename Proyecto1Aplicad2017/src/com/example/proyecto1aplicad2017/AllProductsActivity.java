@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 public class AllProductsActivity extends Activity {
 
+	//create components
 	 private ListView lvProducts;
 	 private String products;
 	
@@ -23,10 +24,13 @@ public class AllProductsActivity extends Activity {
 	}
 
 
+	//initialize components
 	public void start(){
 		
+		//Extra
 		products= getIntent().getStringExtra("products");
 		
+		//Products string management
 		final String productsSplit[]=products.split(",");
 		int productQuantity=productsSplit.length/12;
 		int n=4;
@@ -56,24 +60,22 @@ public class AllProductsActivity extends Activity {
 		String nameSplit[]=nameString.split(";");
 		
 	
+		//set adapter
 		lvProducts = (ListView)findViewById(R.id.lvProducts);
 		ArrayAdapter<String> adapterProduct = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, nameSplit);
 		lvProducts.setAdapter(adapterProduct);
 		
 		
-			
-		
+		//onSet
 		lvProducts.setOnItemClickListener(new OnItemClickListener(){
 			 
-	
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				
+				//Products details management
 				int tam=arg0.getAdapter().getCount();
 				int m=5;
-				
-			
 				
 				for (int j = 0; j < tam; j++) {
 					String priceToInt=productsSplit[m+2].substring(7, 10);
@@ -97,8 +99,5 @@ public class AllProductsActivity extends Activity {
 		 
 		}); 
 		
-	}
-	
-	
-
-}
+	}//end of start
+}//end of class

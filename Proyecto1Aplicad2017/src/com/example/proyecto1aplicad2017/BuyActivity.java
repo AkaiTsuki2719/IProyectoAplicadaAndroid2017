@@ -34,12 +34,12 @@ public class BuyActivity extends Activity implements  OnItemSelectedListener, Vi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_buy);
 		
-		iniciar();
+		start();
 	
 	}
 
-
-	public void iniciar(){
+	//initialize components
+	public void start(){
 		
 		imgBtnFind=(ImageButton)findViewById(R.id.imgBtnFind);
 		imgBtnFind.setOnClickListener(this);
@@ -47,11 +47,12 @@ public class BuyActivity extends Activity implements  OnItemSelectedListener, Vi
 		etByName=(EditText)findViewById(R.id.etByName);
 		
 		spinner = (Spinner) findViewById(R.id.categories_spinner);
+		
 		// Create an ArrayAdapter using the string array and a default spinner layout
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
 		        R.array.categories_array, android.R.layout.simple_spinner_item);
-		// Specify the layout to use when the list of choices appears
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
 		// Apply the adapter to the spinner
 		spinner.setAdapter(adapter);
 		spinner.setOnItemSelectedListener(this);
@@ -62,11 +63,12 @@ public class BuyActivity extends Activity implements  OnItemSelectedListener, Vi
 	public void onClick(View view){
 		if(view.getId()==imgBtnFind.getId()){
 			
-			//decision para saber si se busca con el campo de texto
+			//etByName is null?
 			if(etByName.getText().toString().isEmpty()){
+				//spinner onselected
 				if(spinner.getSelectedItem().toString().equals("Nothing")){
-					
-					//barra de carga
+		
+					 //load bar
 					 progressBar = new ProgressDialog(view.getContext());
 		             progressBar.setCancelable(false);
 		             progressBar.setMessage("Loading...");
@@ -75,45 +77,42 @@ public class BuyActivity extends Activity implements  OnItemSelectedListener, Vi
 		             progressBar.setMax(100);
 		             progressBar.show();
 				 
-			           	 AsyncTask .execute(new Runnable() {
-			 			    @Override
-			 			    public void run() {
-			 			    	jsonObject = DoMethods.getAllProducts("http://10.234.221.222:81/asp1.0/ServiceRest.svc/selectAllProductAndroid");
-
-											  if(jsonObject.isNull("selectAllProductAndroidResult")){
-												progressBar.cancel();
-												
-												  runOnUiThread(new Runnable() {
-													    public void run() {
-													    	  Toast.makeText(getApplicationContext(), "No products available", Toast.LENGTH_LONG).show();
-															  }
-													});
-				                                     
-											  }else{
-												
-													try {
-														String stringAnswer = jsonObject.getString("selectAllProductAndroidResult");
-														String subStringAnswer=stringAnswer.substring(2, stringAnswer.length()-2);
-														 
-														android.util.Log.i("Loi roi : ",stringAnswer);	
-														
-														  Intent intent = new Intent(BuyActivity.this, AllProductsActivity.class);
-													      intent.putExtra("products", subStringAnswer);
-														  startActivity(intent);
+		             //async thread to request
+			         AsyncTask .execute(new Runnable() {
+			 		 @Override
+			 		 public void run() {
+			 		    //URL request
+			 		   	jsonObject = DoMethods.getAllProducts("http://10.234.221.222:81/asp1.0/ServiceRest.svc/selectAllProductAndroid");
+		
+			 		   	//jsonObject is null?
+                 		if(jsonObject.isNull("selectAllProductAndroidResult")){
+								
+                 			progressBar.cancel();
+								
+                 			//toast thread
+							runOnUiThread(new Runnable() {
+							public void run() {
+								Toast.makeText(getApplicationContext(), "No products available", Toast.LENGTH_LONG).show();
+							}
+							});
+					    }else{
+							try {
+								String stringAnswer = jsonObject.getString("selectAllProductAndroidResult");
+								String subStringAnswer=stringAnswer.substring(2, stringAnswer.length()-2);	
+								
+								//open activity and extra
+								Intent intent = new Intent(BuyActivity.this, AllProductsActivity.class);
+								intent.putExtra("products", subStringAnswer);
+								startActivity(intent);
 													      
-														 
-														progressBar.cancel();
+								progressBar.cancel();
 													
-													} catch (JSONException e) {
-														// TODO Auto-generated catch block
-														e.printStackTrace();
-													}
-													  
-													
-												
-											  }
+								} catch (JSONException e) {
+										e.printStackTrace();
+													       }
+						}
 			 			 
-			 			    }
+			 		}
 
 			     });
 				}else{
@@ -380,19 +379,14 @@ public class BuyActivity extends Activity implements  OnItemSelectedListener, Vi
 													e.printStackTrace();
 												}
 												  
-												
-											
 										  }
-		 			 
 		 			    }
 
 		     });
 			}
-				
-				
+						
 			}
-		
-		
+
 	}
 
 

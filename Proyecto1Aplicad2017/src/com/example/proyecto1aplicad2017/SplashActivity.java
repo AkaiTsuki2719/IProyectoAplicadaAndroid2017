@@ -55,6 +55,8 @@ public class SplashActivity extends Activity {
 
         setContentView(R.layout.activity_splash);
 
+        
+        //thread to splash activity
         new Handler().postDelayed(new Runnable(){
             public void run(){
                 // Cuando pasen los 3 segundos, pasamos a la actividad principal de la aplicación
